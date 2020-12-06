@@ -1,0 +1,123 @@
+div.marketClosed{
+  visibility: hidden;
+}
+.row.tables{
+  padding: 10px 30px 10px 30px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.row.tables1{
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.col-6.tables{
+  margin:0px;
+  padding:0px;
+}
+.center{
+  text-align: center;
+  width: 100%;
+  text-align: -webkit-center;
+  text-align: -moz-center;
+}
+.detailsMain{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: black;
+}
+.icon{
+  padding-bottom: 10px;
+}
+.greyColored{
+  color: #63636A;
+}
+.bottomzero{
+  margin-bottom: 0px;
+}
+.black{
+  color: black;
+}
+span.marketClosed{
+  background: #F6D6DA;
+}
+span.marketOpen{
+  background: #A8FBB8;
+}
+.row{
+  margin: 0px;
+}
+.newscard{
+  margin-bottom: 20px;
+}
+.newscard_new{
+    border: solid #F2F2F2 3px;
+    padding: 12px;
+    border-radius: 5px;
+    background: #FAFAFA;
+    height: 100%;
+}
+.newsimg{
+    object-fit: cover;
+    width: 100%;
+    border-radius: 5px;
+}
+.highcharts-container{
+  width: 100%;
+}
+.chart1container{
+  width: 100%;
+}
+.chartcontainer{
+  width: 100%;
+  margin-top: 20px;
+}
+chart {display: block;}
+::ng-deep .mat-tab-body{
+    margin-top: 10px !important;
+}
+.marketCloseOrOpen{
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.newsimg1{
+    object-fit: cover;
+    max-height: 180px;
+    border-radius: 5px;
+    width: 100%;
+}
+.newsModalFooter{
+    border: solid lightgrey 1px;
+    border-radius: 5px;
+    margin: 12px;
+    font-size: medium;
+    padding-bottom: 20px;
+}
+.fabtwitter{
+  font-size: 40px;
+  color: #3992FF;
+}
+.fabfb{
+  font-size: 40px;
+  color: blue;
+}
+.close{
+  align-self: start;
+}
+.newsTitle{
+  font-size: large;
+  line-height: 0.5;
+}
+.loadingContainer{
+  margin-top: 20px;
+}
+.form-control{
+  display: inline-block;
+  width: 45%;
+}
+.text-success{
+  color: green !important;
+}
+.smallInput{
+  width: 100%;
+  margin-top: 10px;
+}

@@ -1,0 +1,59 @@
+.watchcard{
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.detailsMain{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.center{
+  text-align: center;
+  width: 100%;
+  text-align: -webkit-center;
+  text-align: -moz-center;
+}
+.row{
+  margin: 0px;
+}
+.close{
+    margin-top: -10px;
+}
+.btn{
+  margin-left: 10px;
+}
+.greyColored{
+  color: gray;
+}
+.h51{
+  font-size: x-large;
+  line-height: 1.2;
+}
+.col{
+  padding: 0px;
+}
+.col-auto{
+  padding: 0px;
+}
+.mainHeading{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.form-control{
+  display: inline-block;
+  width: 45%;
+}
+.form-control1{
+  width: 20%;
+}
+.text-success{
+  color: green !important;
+}
+.smallInput{
+  width: 100%;
+  margin-top: 10px;
+}
+.loadingContainer{
+  margin-top: 20px;
+}

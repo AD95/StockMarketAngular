@@ -1,0 +1,43 @@
+.container{
+  padding-top: 100px;
+}
+.h1 {
+  font-size: 70px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  font-family: Segoe UI;
+  letter-spacing: 3px;
+}
+.searchname{
+  font-size:small;
+}
+.myform{
+    border: 2px solid #6610f2;
+    border-radius: 30px;
+    display: inline;
+    padding-left: 15px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 8px;
+}
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+    height: 0 !important;
+}
+::ng-deep .mat-form-field-underline {
+    display: none;
+}
+::ng-deep .mat-form-field-ripple {
+  display: none;
+}
+button:focus {
+  outline: none;
+}
+:host footer{
+  bottom: 0;
+}
+.srcicon{
+    padding-bottom: 3px;
+    padding-right: 10px;
+}
+
+

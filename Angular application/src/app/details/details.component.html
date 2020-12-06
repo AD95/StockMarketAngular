@@ -1,0 +1,302 @@
+<!-- Buy Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">{{ticker}}</h4>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-12">
+              Current Price: {{lastDisplay}}<br/>
+            </div>
+          </div>
+          <div class="d-lg-flex d-md-flex d-none row">
+            <div class="col-12">
+              Quantity <input (change)="modelChanged($event)" (keyup)="modelChanged($event)" class="form-control" id="example-number-input"
+                              min="0" oninput="validity.valid||(value='');" step="1" type="number" value="0">
+            </div>
+          </div>
+          <div class="d-lg-none d-md-none d-flex row">
+            <div class="col-12">
+              Quantity
+            </div>
+            <div class="col-12">
+              <input (change)="modelChanged($event)" (keyup)="modelChanged($event)" class="form-control smallInput" id="example-number-input"
+                     min="0" oninput="validity.valid||(value='');" step="1" type="number" value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="mr-auto">Total: {{totalDisplay}}</span>
+        <button (click)="buy()" [disabled]="buydisabled" class="btn btn-success" data-dismiss="modal" type="button">
+          Buy
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- News Modal -->
+<div aria-hidden="true" aria-labelledby="newsModalLabel" class="modal fade" id="newsModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-block">
+        <div class="d-flex">
+          <div class="h2 bottomzero black modal-title" id="newsModalLabel">{{modalNews?modalNews.source.name:""}}</div>
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <p class="modal-title newsTitle greyColored">
+          {{modalNews?modalNews.publishedAt:""}}
+        </p>
+      </div>
+      <div class="modal-body">
+        <div class="h5 bottomzero black">{{modalNews?modalNews.title:""}}</div>
+        <div [innerHtml]="modalNews?modalNews.description:''"></div>
+        <p class="greyColored">
+        For more details click <a href="{{modalNews?modalNews.url:''}}" target="_blank">here</a></p>
+      </div>
+      <div class="modal-footer newsModalFooter">
+        <div class="mr-auto bottomzero black">
+          Share<br/><br/>
+          <a href="https://twitter.com/intent/tweet?text={{modalNews?modalNews.title1:''}}%20{{modalNews?modalNews.url1:''}}"
+             target="_blank"><i class="fab fabtwitter fa-twitter"></i></a>&nbsp;&nbsp;&nbsp;
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{modalNews?modalNews.url1:''}}" target="_blank"><i class="fab fabfb fa-facebook-square"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="detailsMain">
+
+  <ng-container *ngIf="isLoading">
+    <div class="container loadingContainer">
+      <div class="row">
+        <div class="col center">
+          <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="notFound">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="alert center alert-danger fade show" role="alert">
+            No results found. Please enter valid Ticker.
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container
+    *ngIf="!notFound && finishedChart && finishedChart1 && finishedNews && finishedDetails && finishedDetails1">
+
+    <ng-container *ngIf="alertTypeFav">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="alert center alert-success alert-dismissible fade show in out fav" role="alert">
+              {{ticker}} added to Watchlist.
+              <button (click)="closeFav()" aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="alertTypeNotFav">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="alert center alert-danger alert-dismissible fade show in out fav" role="alert">
+              {{ticker}} removed from Watchlist.
+              <button (click)="closeNotFav()" aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="alertTypeBuy">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="alert center alert-success alert-dismissible fade show in out" role="alert">
+              {{ticker}} bought successfully!
+              <button (click)="closeBuy()" aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-7">
+          <p class="h1 bottomzero text-break">{{ticker}} <a (click)="fav()"><img class="icon" height="32" src="{{isFavIcon}}"
+                                                                      width="32"/></a></p>
+        </div>
+        <div class="col-5 text-right">
+          <p class="h1 bottomzero {{marketColor}} text-break">{{lastDisplay}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-7">
+          <p class="h3 greyColored text-break">{{name}}</p>
+        </div>
+        <div class="col-5 text-right">
+          <p class="h3 {{marketColor}} text-break"><img src="{{upOrDown}}"/> {{change}} ({{percentage}}%)</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <p class="text-break">{{exchangecode}}</p>
+        </div>
+        <div class="col-7 text-right">
+          <p class="text-break">{{currentdate | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button (click)="setModal()" class="btn btn-success" data-target="#exampleModal" data-toggle="modal"
+                  type="button">
+            Buy
+          </button>
+        </div>
+      </div>
+      <div class="row marketCloseOrOpen">
+        <div class="col">
+          <p class="text-center"><span class="{{marketOpen}} text-break">Market {{isOpen}}{{isOpenDate | date:'yyyy-MM-dd HH:mm:ss'}}</span></p>
+        </div>
+      </div>
+      <mat-tab-group class="example-stretched-tabs" mat-stretch-tabs>
+        <mat-tab label="Summary">
+          <ng-template matTabContent>
+            <div class="container">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                <div class="d-none d-lg-flex row tables">
+                  <div class="col-6 tables">
+                    <table>
+                      <tr><td>High Price:</td><td>{{high}}</td></tr>
+                      <tr><td>Low Price:</td><td>{{low}}</td></tr>
+                      <tr><td>Open Price:</td><td>{{open}}</td></tr>
+                      <tr><td>Prev. Close:</td><td>{{prev}}</td></tr>
+                      <tr><td>Volume:</td><td>{{vol}}</td></tr>
+                    </table>
+                  </div>
+                  <div class="col-6 tables {{marketOpen}}">
+                    <table>
+                      <tr><td>Mid Price:</td><td>{{mid}}</td></tr>
+                      <tr><td>Ask Price:</td><td>{{ask}}</td></tr>
+                      <tr><td>Ask Size:</td><td>{{size}}</td></tr>
+                      <tr><td>Bid Price:</td><td>{{bidprice}}</td></tr>
+                      <tr><td>Bid Size:</td><td>{{bidsize}}</td></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="d-flex d-lg-none row tables1">
+                  <div class="col-6 tables">
+                    <table>
+                      <tr><td>High Price:</td><td>{{high}}</td></tr>
+                      <tr><td>Low Price:</td><td>{{low}}</td></tr>
+                      <tr><td>Open Price:</td><td>{{open}}</td></tr>
+                      <tr><td>Prev. Close:</td><td>{{prev}}</td></tr>
+                      <tr><td>Volume:</td><td>{{vol}}</td></tr>
+                    </table>
+                  </div>
+                  <div class="col-6 tables {{marketOpen}}">
+                    <table>
+                      <tr><td>Mid Price:</td><td>{{mid}}</td></tr>
+                      <tr><td>Ask Price:</td><td>{{ask}}</td></tr>
+                      <tr><td>Ask Size:</td><td>{{size}}</td></tr>
+                      <tr><td>Bid Price:</td><td>{{bidprice}}</td></tr>
+                      <tr><td>Bid Size:</td><td>{{bidsize}}</td></tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="row">
+                  <h2 class="center">Company's Description<br/></h2>
+                  <p>Start Date: {{startDate}}<br/></p>
+                  {{desc}}
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id="chartcontainer">
+                <ng-container *ngIf="chartOptions">
+                  <highcharts-chart *ngIf="isHighcharts"
+                                    [(update)]="updateFlag"
+                                    [Highcharts]="Highcharts"
+                                    [callbackFunction]="chartCallback"
+                                    [constructorType]="'stockChart'"
+                                    [options]="chartOptions"
+                                    style="display:block;min-height:350px;margin-top: 20px;"
+                  ></highcharts-chart>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Top News">
+          <ng-container *ngIf="newsArray">
+            <div class="container">
+              <div class="row">
+                <ng-container *ngFor="let news of newsArray">
+                  <div class="col-lg-6 col-md-12 col-sm-12 newscard" *ngIf="news" (click)="clickNews(news)" data-target="#newsModal" data-toggle="modal">
+                    <div class="row newscard_new">
+                      <div class="col-lg-3 col-md-3 col-sm-12">
+                        <img alt="News Image" class="newsimg" src="{{news.urlToImage}}"/>
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                        {{news.title}}
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </mat-tab>
+        <mat-tab label="Charts">
+          <ng-template matTabContent>
+            <div class="container">
+              <div class="row">
+                <div class="col-12" id="chart1container">
+                  <ng-container *ngIf="chartOptions1">
+                    <highcharts-chart *ngIf="isHighcharts1"
+                                      [(update)]="updateFlag1"
+                                      [Highcharts]="Highcharts1"
+                                      [callbackFunction]="chartCallback1"
+                                      [constructorType]="'stockChart'"
+                                      [options]="chartOptions1"
+                                      style="display:block;min-height:700px;"
+                    ></highcharts-chart>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </ng-container>
+</div>

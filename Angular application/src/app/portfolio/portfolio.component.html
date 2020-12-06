@@ -1,0 +1,213 @@
+<!-- Buy Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">{{ticker}}</h4>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-12">
+              Current Price: {{lastDisplay}}<br/>
+            </div>
+          </div>
+          <div class="d-lg-flex d-md-flex d-none row">
+            <div class="col-12">
+              Quantity <input (change)="modelChanged($event)" (keyup)="modelChanged($event)" class="form-control" id="example-number-input"
+                              min="0" oninput="validity.valid||(value='');" step="1" type="number" value="0">
+            </div>
+          </div>
+          <div class="d-lg-none d-md-none d-flex row">
+            <div class="col-12">
+              Quantity
+            </div>
+            <div class="col-12">
+              <input (change)="modelChanged($event)" (keyup)="modelChanged($event)" class="form-control smallInput" id="example-number-input"
+                     min="0" oninput="validity.valid||(value='');" step="1" type="number" value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="mr-auto">Total: {{totalDisplay}}</span>
+        <button (click)="buy()" [disabled]="buydisabled" class="btn btn-success" data-dismiss="modal" type="button">
+          Buy
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sell Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel1" class="modal fade" id="exampleModal1" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel1">{{ticker}}</h4>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-12">
+              Current Price: {{lastDisplay}}<br/>
+            </div>
+          </div>
+          <div class="d-lg-flex d-md-flex d-none row">
+            <div class="col-12">
+              Quantity <input (keyup)="modelChanged1($event)" (change)="modelChanged1($event)" autofocus class="form-control form-control1" oninput="validity.valid||(value='');" id="example-number-input1" min="0" step="1" type="number"
+                              value="0">
+            </div>
+          </div>
+          <div class="d-lg-none d-md-none d-flex row">
+            <div class="col-12">
+              Quantity
+            </div>
+            <div class="col-12">
+              <input (keyup)="modelChanged1($event)" (change)="modelChanged1($event)" autofocus class="form-control smallInput" oninput="validity.valid||(value='');" id="example-number-input1" min="0" step="1" type="number"
+                     value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="mr-auto">Total: {{totalDisplay}}</span>
+        <button (click)="sell()" [disabled]="buydisabled" class="btn btn-success" data-dismiss="modal" type="button">
+          Sell
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="detailsMain">
+
+  <div class="container mainHeading">
+    <div class="row">
+      <div class="col">
+        <p class="h1">My Portfolio</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="isLoading">
+    <div class="container loadingContainer">
+      <div class="row">
+        <div class="col center">
+          <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <ng-container *ngIf="!isLoading && (!watchList || watchList.length == 0)">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="alert center alert-warning fade show" role="alert">
+            Currently you don't have any stock.
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="watchList">
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="watchList">
+            <ng-container *ngFor="let watch of watchList">
+              <ng-container *ngIf="watch.num > 0">
+                <div class="card watchcard">
+                  <h5 (click)="clickWatch(watch)" class="card-header">
+                    <span class="h3">{{watch.ticker}}</span>
+                    <span class="h5 greyColored">    {{watch.name}}</span>
+                  </h5>
+                  <div class="">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Quantity:</span>
+                          </div>
+                          <div class="col text-right">
+                            <span class="h51">{{watch.numDisplay}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Avg. Cost / Share:</span>
+                          </div>
+                          <div class="col text-right">
+                            <span class="h51">{{watch.avgDisplay}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Total Cost:</span>
+                          </div>
+                          <div class="col text-right">
+                            <span class="h51">{{watch.tot}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Change:</span>
+                          </div>
+                          <div class="col {{watch.marketColor}} text-right">
+                            <span class="h51"><img src="{{watch.upOrDown}}"/> {{watch.change}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Current Price:</span>
+                          </div>
+                          <div class="col {{watch.marketColor}} text-right">
+                            <span class="h51">{{watch.lastDisplay}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="h51">Market Value:</span>
+                          </div>
+                          <div class="col {{watch.marketColor}} text-right">
+                            <span class="h51">{{watch.tot1}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br/>
+                  </div>
+                  <div class="card-footer text-right">
+                    <button (click)="setModal(watch)" class="btn btn-primary" data-target="#exampleModal" data-toggle="modal"
+                            type="button">
+                      Buy
+                    </button>
+                    <button (click)="setModal(watch)" class="btn btn-danger" data-target="#exampleModal1" data-toggle="modal"
+                            type="button">
+                      Sell
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

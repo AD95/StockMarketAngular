@@ -1,0 +1,66 @@
+<div class="detailsMain">
+
+  <div class="container mainHeading">
+    <div class="row">
+      <div class="col">
+        <p class="h1">My Watchlist</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="isLoading">
+    <div class="container loadingContainer">
+      <div class="row">
+        <div class="col center">
+          <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <ng-container *ngIf="!isLoading && (!watchList || watchList.length == 0)">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="alert center alert-warning fade show" role="alert">
+            Currently you don't have any stock in your watchlist.
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="watchList">
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="watchList">
+            <div *ngFor="let watch of watchList">
+              <ng-container *ngIf="watch">
+                <div class="watchcard">
+                  <button type="button" style="float: right;" class="close" (click)="notFav(watch)" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class="container" (click)="clickWatch(watch)">
+                    <div class="row">
+                      <div class="col">
+                        <p class="h3">{{watch.ticker}}</p>
+                        <p class="h5">{{watch.name}}</p>
+                      </div>
+                      <div class="col text-right">
+                        <p class="h3 {{watch.marketColor}}">{{watch.last}}</p>
+                        <p class="h5 {{watch.marketColor}}"><img src="{{watch.upOrDown}}"/> {{watch.change}} ({{watch.percentage}}%)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
